@@ -31,7 +31,7 @@ dataset_params:
                                # then loaded when needed (True) or compute every time they are neede
   overwrite_processed_data: False # If True, sequence detects are processed again, and previous data is overwritten
                                   # (GT assignment, precomp embeddings (if they exist), processed dets file
-  det_file_name: detections # Name of the detections file used for val/test (matches the one created in preprocessing (see preprocessing.yaml)
+  det_file_name: det # Name of the detections file used for val/test (matches the one created in preprocessing (see preprocessing.yaml)
                                     # e.g. change it for frcnn_prepr_det if not using tracktor for preprocessing
 
   node_core_embeddings_dir: resnet50_node_core_3d_0.65  # Storage name for precomputing CNN 1d node embeddings

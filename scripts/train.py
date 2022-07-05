@@ -36,19 +36,8 @@ def cfg(cross_val_split, eval_params, dataset_params, graph_model_params, data_s
     # Make sure that the edges encoder MLP input dim. matches the number of edge features used.
     graph_model_params['encoder_feats_dict']['edge_in_dim'] = len(dataset_params['edge_feats_to_use'])
 
-    data_splits['train'] = ['mots20_val_split']
+    data_splits['train'] = ['mots20_train_split']
     data_splits['val'] = ['mots20_val_split']
-
-    # Determine which sequences will be used for training  / validation
-    # if cross_val_split is not None:
-    #     assert cross_val_split in (1, 2, 3), f"{cross_val_split} is not a valid cross validation split"
-    #     data_splits['train'] =['mot15_train_gt', f'mot17_split_{cross_val_split}_train_gt']
-    #     data_splits['val'] = [f'split_{cross_val_split}_val']
-    #
-    # # If we're training on all the available training data, disable validation
-    # if data_splits['train'] =='all_train' or data_splits['val'] is None:
-    #     data_splits['val'] = []
-    #     eval_params['val_percent_check'] = 0
 
 
 @ex.automain
