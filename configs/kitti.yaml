@@ -1,0 +1,218 @@
+seed: 12345
+train_params:
+  batch_size: 1
+  accumulate_grad_batches: 8
+  num_epochs: 25
+  optimizer:
+    type: Adam
+    args:
+      lr: 0.001
+      weight_decay: 0.0001
+
+  lr_scheduler:
+    type:
+    args:
+      step_size: 7
+      gamma: 0.5
+
+  loss_weights:
+    tracking: 1
+    segmentation: 1
+
+  num_workers: 4 # Used for dataloaders
+  save_every_epoch: False # Determines if every a checkpoint will be saved for every epoch
+  save_epoch_start: 1 # If the arg above is set to True, determines the first epoch after which we start saving ckpts
+  tensorboard: False
+
+dataset_params:
+  true_edge_labels: 'closest' # all=cluster, closest=sequentially
+  # Dataset Processing params:
+  precomputed_embeddings: True # Determines whether CNN embeddings for nodes and reid are computed once, stored, and
+                               # then loaded when needed (True) or compute every time they are neede
+  overwrite_processed_data: False # If True, sequence detects are processed again, and previous data is overwritten
+                                  # (GT assignment, precomp embeddings (if they exist), processed dets file
+  det_file_name: det # Name of the detections file used for val/test (matches the one created in preprocessing (see preprocessing.yaml)
+                                    # e.g. change it for frcnn_prepr_det if not using tracktor for preprocessing
+
+  node_core_embeddings_dir: resnet50_node_core_3d_0.65  # Storage name for precomputing CNN 1d node embeddings
+  reid_embeddings_dir: resnet50_w_fc256_reid_0.65 # Storage name for precomputing reid embeddings
+  node_ext_embeddings_dir: resnet50_fpn_node_ext_14_0.65 # Storage name for precomputing CNN 3d node embeddings
+  confidence_threshold: 0.65 # Detections below than this threshold are thrown away
+
+  # Gt assignment
+  gt_assign_min_iou: 0.5 # Min IoU between a GT and detected box so that an assignment is allowed
+  # Parameters for heuristics used in MOT15 ground truth preprocessing for training
+  #GT_train_max_iou_containment_thresh: 0.85 # Maximum overlap that two boxes can have in order to be kept
+  #GT_train_max_iou_thresh: 0.75 # Maximum 'containment score' that a box can have in order to be kept (see mot_seqs.MOT15loader.py)
+
+  # Data Augmentation Params
+  augment: False # Determines whether data augmentation is performed
+  min_iou_bb_wiggling: 0.8 # Minimum IoU w.r.t. original box used when doing
+  min_ids_to_drop_perc: 0  # Minimum percentage of ids s.t. all of its detections will be dropped
+  max_ids_to_drop_perc: 0.15  # Maximum percentage of ids s.t. all of its detections will be dropped
+  min_detects_to_drop_perc: 0  # Minimum Percentage of detections that might be randomly dropped
+  max_detects_to_drop_perc: 0.3  # Maximum Percentage of detections that might be randomly dropped
+  p_change_fps_step: 0.0 # Probability of randomly changing the frame sampling rate during training
+
+  # RGB params
+  img_size: [128, 64] # Size at which bounding box images are resized
+  img_batch_size: 1000 # Batch size for evaluating
+  embedding_spatial_size: 14
+  node_embedding_model_url: 'https://download.pytorch.org/models/maskrcnn_resnet50_fpn_coco-bf2d0c1e.pth'
+  gt_mask_spatial_size: [56, 56]
+
+  # Graph Construction Parameters
+  gt_training_min_vis: 0.2 # Minimum visibility score allowed in a GT box to be used for training
+  frames_per_graph: 20 # Maximum number of frames contained in each graph sampled graph
+  max_frame_dist: max # Determines the maximum distance in num of frames between two detections in a graph connected
+                      # by an edge (setting it to a num is dangerous, as dist in frames depends on fps...) (should use seconds instead)
+  min_detects: 2 # Minimum number of detections allowed so that a graph is sampled
+  max_detects: 500 # Maximum number of detections allowed
+  top_k_nns: 100  # Top K-nearest neighbors (w.r.t reid score) to which a node can be  connected in the graph
+  reciprocal_k_nns: True  # Indicates whether, connected nodes in the graph have to be
+                          # reciprocal NNs or not (i.e. (i, j) is an edge <--> i is a k-nn for j and
+                          # j is a k-nn for i
+  edge_feats_to_use: # List of edge features to use (see 'compute_edge_feats_dict' in utils/graph.py
+    # Time distance
+    - secs_time_dists
+    # Coordinate distances (differences)
+    - norm_feet_x_dists
+    - norm_feet_y_dists
+    # BB Size distances (Log-ratios)
+    - bb_height_dists
+    - bb_width_dists
+    # ReID Score
+    - emb_dist
+
+  target_fps_dict: # Frame sampling rate for sequences with static/moving camera
+    moving: 30
+    static: 30
+
+  mask_priority: False # Gives priority to the calculations with masks compared to bounding boxes
+
+  cnn_params:
+    arch: resnet50
+    model_weights_path:
+      resnet50: trained_models/reid/resnet50_market_cuhk_duke.tar-232
+
+data_splits: # See src/mot_neural_solver/data/splits.py
+#  train: split_1_val
+#  val: 'split_1_val'
+  test: ['kittimots_test']
+
+eval_params:
+  # Logging / Metrics reporting params
+  tensorboard: False
+  corr_cluster: GAEC
+  check_val_every_n_epoch: 2
+  val_percent_check: 0.15 # Percentage of the entire dataset used each time that validation loss is computed
+  mot_metrics_to_log: ['sMOTSA', 'norm_sMOTSA', 'MOTSA', 'norm_MOTSA',
+                       'IDF1', 'norm_IDF1', 'constr_sr']
+  metrics_to_log: ['loss', 'precision', 'recall', 'constr_sr']
+  log_per_seq_metrics: False
+  normalize_mot_metrics: False # Determines whether MOT results are computer via an oracle (i.e. GT labels), in order to
+                              # normalize results. (i.e. what is the best possible MOTA we could get with a set of dets?)
+  compute_pred_oracles: False
+  mot_metrics_to_norm: ['sMOTSA', 'MOTSA', 'IDF1']
+  best_method_criteria: 'idf1'
+
+  # Inference Params
+  rounding_method: exact # Determines whether an LP is used for rounding ('exact') or a greedy heuristic ('greedy')
+  solver_backend: pulp # Determines package used to solve the LP, (Gurobi requires a license, pulp does not)
+  set_pruned_edges_to_inactive: False # Determines whether pruning an edge during inference has the same effect
+                                      # as predicting it as being non-active, or as not predicting a value for it
+                                      # (i.e. the averaging is only computed among the times the edge is not pruned)
+
+  # Postprocessing parameters:
+  use_tracktor_start_ends: True
+  add_tracktor_detects: False
+  min_track_len: 10
+  mask_threshold: 0.5
+
+  mask_model_url: 'https://download.pytorch.org/models/maskrcnn_resnet50_fpn_coco-bf2d0c1e.pth'
+
+graph_model_params:
+  node_agg_fn: 'sum'
+  num_enc_steps: 4  # Number of message passing steps
+  num_class_steps: 3  # Number of message passing steps during feature vectors are classified (after Message Passing)
+  reattach_initial_nodes: True  # Determines whether initially encoded node feats are used during node updates
+  reattach_initial_edges: True  # Determines whether initially encoded edge feats are used during node updates
+
+  encoder_feats_dict:
+    edge_in_dim: 6
+    edge_dims: [18, 18]
+    edge_out_dim: 16
+
+    node_in_dim: 2048
+    node_dims: [128]
+    node_out_dim: 32
+
+    dropout_p: 0
+    use_batchnorm: False
+
+  edge_model_feats_dict:
+    dims: [80, 16] # In size is 4 * encoded nodes + 2 * encoded edges
+    dropout_p: 0
+    use_batchnorm: False
+
+  node_model_feats_dict:
+    dims: [56, 32]
+    dropout_p: 0
+    use_batchnorm: False
+
+  classifier_feats_dict:
+    edge_in_dim: 16
+    edge_dims: [8]
+    edge_out_dim: 1
+    dropout_p: 0
+    use_batchnorm: False
+
+  node_ext_encoder_feats_dict:
+    input_dim: 256
+    dims: [128, 32]
+    kernel_sizes: [1, 1]
+    strides: [1, 1]
+    paddings: [0, 0]
+    dropout_p: 0
+    use_batchnorm: False
+
+
+  attention_model_feats_dict:
+      fc_dims: [16, 1]
+      dropout_p: 0
+      use_batchnorm: False
+
+  node_ext_model_feats_dict:
+    dims: [96, 32]
+    kernel_sizes: [3, 3]
+    strides: [1, 1]
+    paddings: [1, 1]
+    dropout_p: 0
+    use_batchnorm: False
+
+  mask_model_feats_dict:
+    feature_encoder_feats_dict:
+      input_dim: 256
+      dims: [32]
+      kernel_sizes: [1]
+      strides: [1]
+      paddings: [0]
+      dropout_p: 0
+      use_batchnorm: False
+
+    mask_head_feats_dict:
+      input_dim: 64
+      dims: [64, 64, 64]
+      kernel_sizes: [3, 3, 3]
+      strides: [1, 1, 1]
+      paddings: [1, 1, 1]
+      dropout_p: 0
+      use_batchnorm: False
+
+    mask_predictor_feats_dict:
+      input_dim: 64
+      dims: [64, 64, 64, 1]
+      kernel_sizes: [2, 3, 2, 1]
+      strides: [2, 1, 2, 1]
+      paddings: [0, 1, 0, 0]
+      transposed: [True, False, True, False]

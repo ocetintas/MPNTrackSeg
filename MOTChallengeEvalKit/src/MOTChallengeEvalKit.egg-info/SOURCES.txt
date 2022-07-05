@@ -1,0 +1,9 @@
+setup.py
+src/MOTChallengeEvalKit/Evaluator.py
+src/MOTChallengeEvalKit/Metrics.py
+src/MOTChallengeEvalKit/Visualize.py
+src/MOTChallengeEvalKit/__init__.py
+src/MOTChallengeEvalKit.egg-info/PKG-INFO
+src/MOTChallengeEvalKit.egg-info/SOURCES.txt
+src/MOTChallengeEvalKit.egg-info/dependency_links.txt
+src/MOTChallengeEvalKit.egg-info/top_level.txt
