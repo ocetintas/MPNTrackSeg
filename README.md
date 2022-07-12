@@ -116,4 +116,4 @@ python scripts/evaluate.py
     ```
 
 ## Acknowledgements
-We use build upon the codebases of [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) for preprocessing and [MOTChallengeEvalKit](https://github.com/dendorferpatrick/MOTChallengeEvalKit) and [TrackEval](https://github.com/JonathonLuiten/TrackEval) for evaluation. We thank the authors of these codebases for their great work!
+We use the codebases of [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) for preprocessing and [MOTChallengeEvalKit](https://github.com/dendorferpatrick/MOTChallengeEvalKit) and [TrackEval](https://github.com/JonathonLuiten/TrackEval) for evaluation. We thank the authors of these codebases for their great work!
