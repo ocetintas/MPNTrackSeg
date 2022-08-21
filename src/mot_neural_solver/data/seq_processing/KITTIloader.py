@@ -40,8 +40,7 @@ MOV_CAMERA_DICT = {
     'KITTIMOTS-27': True,
     'KITTIMOTS-28': True
 }
-DET_COL_NAMES = ('frame', 'bb_left', 'bb_top', 'bb_width', 'bb_height', 'conf', 'label', 'img_height', 'img_width',
-                 'rle')
+DET_COL_NAMES = ('frame', 'bb_left', 'bb_top', 'bb_width', 'bb_height', 'conf', 'label', 'img_height', 'img_width')
 GT_COL_NAMES = ('frame', 'id', 'label', 'img_height', 'img_width', 'rle')
 
 def _add_frame_path(det_df, seq_name, data_root_path, seq_info_dict):
@@ -101,21 +100,18 @@ def get_kittimots_det_df(seq_name, data_root_path, dataset_params):
 
     if dataset_params['det_file_name'] == 'tracktor_prepr_det':
         DET_COL_NAMES = ('frame', 'id', 'bb_left', 'bb_top', 'bb_width', 'bb_height', 'conf', 'label', 'img_height',
-                         'img_width', 'rle')
+                         'img_width')
     else:
         DET_COL_NAMES = ('frame', 'bb_left', 'bb_top', 'bb_width', 'bb_height', 'conf', 'label', 'img_height',
-                         'img_width', 'rle')
+                         'img_width')
 
     # Number and order of columns is always assumed to be the same
     det_df = det_df[det_df.columns[:len(DET_COL_NAMES)]]
     det_df.columns = DET_COL_NAMES
     det_df = det_df[det_df['label'].isin([2])].copy()
 
-    det_df = _make_cocotools_compatible(det_df)  # Store in cocotools format to retrieve the mask easily
-
-    if dataset_params['det_file_name'] == 'det':
-        det_df = det_df[det_df['conf'].ge(dataset_params['confidence_threshold'])].copy()
-        det_df['id'] = -1
+    det_df = det_df[det_df['conf'].ge(dataset_params['confidence_threshold'])].copy()
+    det_df['id'] = -1
 
     # det_df['bb_left'] -= 1 # Coordinates are 1 based
     # det_df['bb_top'] -= 1
