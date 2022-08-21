@@ -96,12 +96,12 @@ python scripts/evaluate.py
  1. Multi-Object Tracking and Segmentation via Neural Message Passing (TbD)
 
     ```
-        @article{mpntrackseg,
-        author={Guillem Brasó and Orcun Cetintas and Laura Leal-Taixé},
+      @article{braso2022multi,
         title={Multi-Object Tracking and Segmentation via Neural Message Passing},
-        journal = {TbD},
-        year = {2022}
-    }
+        author={Braso, Guillem and Cetintas, Orcun and Leal-Taixe, Laura},
+        journal={arXiv preprint arXiv:2207.07454},
+        year={2022}
+      }
     ```
 2. Learning a Neural Solver for Multiple Object Tracking (CVPR 2020)
 
@@ -116,4 +116,4 @@ python scripts/evaluate.py
     ```
 
 ## Acknowledgements
-We use build upon the codebases of [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) for preprocessing and [MOTChallengeEvalKit](https://github.com/dendorferpatrick/MOTChallengeEvalKit) and [TrackEval](https://github.com/JonathonLuiten/TrackEval) for evaluation. We thank the authors of these codebases for their great work!
+We use the codebases of [Tracktor](https://github.com/phil-bergmann/tracking_wo_bnw) for preprocessing and [MOTChallengeEvalKit](https://github.com/dendorferpatrick/MOTChallengeEvalKit) and [TrackEval](https://github.com/JonathonLuiten/TrackEval) for evaluation. We thank the authors of these codebases for their great work!
