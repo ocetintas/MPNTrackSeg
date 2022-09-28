@@ -1,6 +1,6 @@
 # Multi-Object Tracking and Segmentation via Neural Message Passing
 
-This the official implementation of our paper *Multi-Object Tracking and Segmentation via Neural Message Passing* ([Guillem Brasó*](https://dvl.in.tum.de/team/braso/), [Orcun Cetintas*](https://dvl.in.tum.de/team/cetintas/), [Laura Leal-Taixe](https://dvl.in.tum.de/team/lealtaixe/)) 
+This the official implementation of our **IJCV 2022** paper *Multi-Object Tracking and Segmentation via Neural Message Passing* ([Guillem Brasó*](https://dvl.in.tum.de/team/braso/), [Orcun Cetintas*](https://dvl.in.tum.de/team/cetintas/), [Laura Leal-Taixe](https://dvl.in.tum.de/team/lealtaixe/)) 
 
 This work builds upon our previous **CVPR 2020 (oral)** paper [*Learning a Neural Solver for Multiple Object Tracking*](https://arxiv.org/abs/1912.07515)
 and extends it by: 
@@ -93,15 +93,19 @@ python scripts/evaluate.py
 ## Citation
  If you use our work in your research, please cite our publications:
 
- 1. Multi-Object Tracking and Segmentation via Neural Message Passing (TbD)
+ 1. Multi-Object Tracking and Segmentation via Neural Message Passing (IJCV 2022)
 
     ```
-      @article{braso2022multi,
-        title={Multi-Object Tracking and Segmentation via Neural Message Passing},
-        author={Braso, Guillem and Cetintas, Orcun and Leal-Taixe, Laura},
-        journal={arXiv preprint arXiv:2207.07454},
-        year={2022}
-      }
+         @article{MPNTrackSeg,
+         author = {Bras{\'o}, Guillem and Cetintas, Orcun and Leal-Taix{\'e}, Laura},
+         date = {2022/09/26},
+         doi = {10.1007/s11263-022-01678-6},
+         id = {Bras{\'o}2022},
+         isbn = {1573-1405},
+         journal = {International Journal of Computer Vision},
+         title = {Multi-Object Tracking and Segmentation Via Neural Message Passing},
+         url = {https://doi.org/10.1007/s11263-022-01678-6},
+         year = {2022}}
     ```
 2. Learning a Neural Solver for Multiple Object Tracking (CVPR 2020)
 
